@@ -1,5 +1,6 @@
 import Hero from '@/components/Hero';
 import HoldTyperCard from '@/components/HoldTyperCard';
+import NewsletterSignUp from '@/components/NewsletterSignUp';
 
 export default function Home() {
     return (
@@ -41,6 +42,9 @@ export default function Home() {
                             og motiverende, så motion og danseglæde går hånd i hånd.
                         </p>
                     </HoldTyperCard>
+                </section>
+                <section className='px-4 flex flex-col gap-8'>
+                    <NewsletterSignUp />
                 </section>
             </main>
         </div>
