@@ -1,6 +1,15 @@
-import * as z from 'zod';
+import { z } from 'zod/v4';
+
+type FieldError = {
+    errors: string[];
+};
 
 export const emailSchema = z.email({ message: 'Invalid email address' });
+
+export type EmailError = {
+    email?: FieldError;
+};
+
 export const contactFormSchema = z.object({
     name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
     email: emailSchema,
@@ -9,13 +18,11 @@ export const contactFormSchema = z.object({
 
 export type ContactFormData = z.infer<typeof contactFormSchema>;
 
-export function getZodErrorMessages(error: z.ZodError): string[] {
-    const flattened = z.flattenError(error);
-    const fieldErrors = Object.values(flattened.fieldErrors)
-        .flat()
-        .filter((message): message is string => typeof message === 'string');
-    return [...flattened.formErrors, ...fieldErrors];
-}
+export type ContactFormErrors = {
+    name?: FieldError;
+    email?: FieldError;
+    message?: FieldError;
+};
 
 export const signUpSchema = z.object({
     username: z.string().min(3, { message: 'Username must be at least 3 characters' }),
@@ -29,3 +36,12 @@ export const signUpSchema = z.object({
 });
 
 export type SignUpData = z.infer<typeof signUpSchema>;
+
+export type SignUpErrors = {
+    username?: FieldError;
+    password?: FieldError;
+    firstName?: FieldError;
+    lastName?: FieldError;
+    age?: FieldError;
+    role?: FieldError;
+};

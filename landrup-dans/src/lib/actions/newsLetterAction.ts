@@ -1,10 +1,10 @@
 'use server';
 
-import { emailSchema, getZodErrorMessages } from '../schemas/schema';
+import { EmailError, emailSchema } from '../schemas/schema';
 
 export type NewsletterState = {
     success: boolean;
-    errors?: string[];
+    errors: string[];
 };
 
 export async function subscribeToNewsletter(
@@ -17,7 +17,7 @@ export async function subscribeToNewsletter(
     console.log('Email value:', email);
 
     if (!result.success) {
-        return { success: false, errors: getZodErrorMessages(result.error) };
+        return { success: false, errors: result.error.issues.map((err) => err.message) };
     }
 
     console.log('Validation result:', result);
@@ -34,5 +34,5 @@ export async function subscribeToNewsletter(
         return { success: false, errors: ['Could not subscribe to newsletter'] };
     }
 
-    return { success: true };
+    return { success: true, errors: [] };
 }

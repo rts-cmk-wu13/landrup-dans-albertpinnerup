@@ -1,17 +1,17 @@
 'use client';
-import { signUpAction } from '@/lib/actions/authActions';
+import { signUpAction, type SignUpState } from '@/lib/actions/authActions';
 import { useActionState } from 'react';
 import { Button } from './ui/button';
 
-const initialState = {
+const initialState: SignUpState = {
     success: false,
-    errors: [],
+    errors: {},
 };
 
 export default function SignUpForm() {
     const [state, formAction, isPending] = useActionState(signUpAction, initialState);
 
-    console.log('state:', state, 'errors:', state.errors);
+    console.log('state:', state);
     console.log(process.env.NEXT_PUBLIC_API_URL);
 
     return (
@@ -25,6 +25,7 @@ export default function SignUpForm() {
                     className='border border-secondary bg-secondary text-primary w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                     required
                 />
+
                 <input
                     type='text'
                     name='lastName'
@@ -32,6 +33,7 @@ export default function SignUpForm() {
                     className='border border-secondary bg-secondary text-primary w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                     required
                 />
+
                 <input
                     type='text'
                     name='username'
@@ -39,6 +41,7 @@ export default function SignUpForm() {
                     className='border border-secondary bg-secondary text-primary w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                     required
                 />
+
                 <input
                     type='number'
                     name='age'
@@ -46,6 +49,7 @@ export default function SignUpForm() {
                     className='border border-secondary bg-secondary text-primary w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                     required
                 />
+
                 <input
                     type='password'
                     name='password'
@@ -53,6 +57,7 @@ export default function SignUpForm() {
                     className='border border-secondary bg-secondary text-primary w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                     required
                 />
+
                 <input
                     type='password'
                     name='confirmPassword'
@@ -60,6 +65,7 @@ export default function SignUpForm() {
                     className='border border-secondary bg-secondary text-primary w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                     required
                 />
+
                 <Button type='submit' disabled={isPending} className='mx-8 p-4'>
                     {isPending ? 'Opretter bruger...' : 'Opret bruger'}
                 </Button>

@@ -24,13 +24,6 @@ export default function NewsletterSignUp() {
             <h1>Nyhedsbrev</h1>
             <p>Få direkte besked når vi har sæsonstart eller afholder arrangementer</p>
             <form action={formAction} className='flex w-full gap-4 justify-between'>
-                {state.errors && state.errors.length > 0 && (
-                    <div className='bg-red-100 text-red-700 p-2 rounded-md'>
-                        {state.errors.map((error, index) => (
-                            <p key={index}>{error}</p>
-                        ))}
-                    </div>
-                )}
                 <input
                     type='email'
                     name='email'
@@ -38,6 +31,11 @@ export default function NewsletterSignUp() {
                     className='border border-gray-300 w-full rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                     required
                 />
+
+                {state.errors?.length > 0 && (
+                    <p className='text-red-500 text-sm mt-1'>{state.errors[0]}</p>
+                )}
+
                 <Button type='submit'>Tilmeld</Button>
             </form>
         </section>

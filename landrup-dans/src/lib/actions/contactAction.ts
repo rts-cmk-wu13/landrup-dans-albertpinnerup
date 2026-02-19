@@ -1,8 +1,9 @@
-import { contactFormSchema, getZodErrorMessages } from '../schemas/schema';
+import { z } from 'zod/v4';
+import { ContactFormErrors, contactFormSchema } from '../schemas/schema';
 
 export type ContactState = {
     success: boolean;
-    errors?: string[];
+    errors: ContactFormErrors;
 };
 
 export default async function contactAction(
@@ -13,7 +14,17 @@ export default async function contactAction(
     const result = contactFormSchema.safeParse(values);
 
     if (!result.success) {
-        return { success: false, errors: getZodErrorMessages(result.error) };
+        const zodError = z.treeifyError(result.error);
+
+        console.log('Zod validation error:', zodError);
+        return {
+            success: false,
+            errors: {
+                name: zodError.properties?.name,
+                email: zodError.properties?.email,
+                message: zodError.properties?.message,
+            },
+        };
     }
 
     console.log('Validation result:', result);
@@ -30,5 +41,5 @@ export default async function contactAction(
         }),
     });
 
-    return { success: true };
+    return { success: true, errors: {} };
 }

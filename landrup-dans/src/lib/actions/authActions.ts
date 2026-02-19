@@ -1,13 +1,14 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { getZodErrorMessages, signUpSchema } from '../schemas/schema';
+import { SignUpErrors, signUpSchema } from '../schemas/schema';
 import { createAccessToken } from '../utils';
 import { redirect } from 'next/navigation';
+import { z } from 'zod/v4';
 
 export type SignUpState = {
     success: boolean;
-    errors?: string[];
+    errors: SignUpErrors | string[];
 };
 
 export async function signUpAction(
@@ -32,7 +33,19 @@ export async function signUpAction(
     console.log('Zod validation result:', result);
 
     if (!result.success) {
-        return { success: false, errors: getZodErrorMessages(result.error) };
+        const zodError = z.treeifyError(result.error);
+
+        console.log('Zod validation error:', zodError);
+        return {
+            success: false,
+            errors: {
+                username: zodError.properties?.username,
+                password: zodError.properties?.password,
+                firstName: zodError.properties?.firstName,
+                lastName: zodError.properties?.lastName,
+                age: zodError.properties?.age,
+            },
+        };
     }
 
     if (values.password !== formData.get('confirmPassword')) {
@@ -61,11 +74,15 @@ export async function signUpAction(
         return { success: false, errors: errorData.errors || ['Signup failed'] };
     }
 
-    const accessToken = await createAccessToken(result.data.username, result.data.password);
+    const { accessToken, userId } = await createAccessToken(
+        result.data.username,
+        result.data.password
+    );
 
     console.log('Access token:', accessToken);
 
     cookieStore.set('accessToken', accessToken);
+    cookieStore.set('userId', String(userId));
 
-    return redirect('/profil');
+    redirect('/profil');
 }

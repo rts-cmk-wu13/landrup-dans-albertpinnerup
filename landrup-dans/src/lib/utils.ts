@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-export async function createAccessToken(username: string, password: string): Promise<string> {
+export async function createAccessToken(username: string, password: string) {
     const response = await fetch(`${process.env.BASE_API_URL}/auth/token`, {
         method: 'POST',
         headers: {
@@ -25,5 +25,5 @@ export async function createAccessToken(username: string, password: string): Pro
 
     console.log('Access token response:', data);
 
-    return data.token;
+    return { accessToken: data.accessToken, userId: data.userId };
 }
