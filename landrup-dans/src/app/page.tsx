@@ -1,12 +1,14 @@
+import ContactForm from '@/components/ContactForm';
 import Hero from '@/components/Hero';
 import HoldTyperCard from '@/components/HoldTyperCard';
+import HomeFooter from '@/components/HomeFooter';
 import NewsletterSignUp from '@/components/NewsletterSignUp';
 import Testimonials from '@/components/Testimonials';
 
 export default function Home() {
     return (
         <div className='w-full font-sans'>
-            <main className='flex w-full flex-col gap-4 mb-4'>
+            <main className='flex w-full flex-col gap-8 mb-4'>
                 <Hero />
                 <section className='px-4 flex flex-col gap-8'>
                     <h1 id='holdtyper'>Vores holdtyper</h1>
@@ -47,10 +49,16 @@ export default function Home() {
                 <section className='px-4 flex flex-col gap-8'>
                     <NewsletterSignUp />
                 </section>
-                {/* <section className='px-4 flex flex-col gap-8'> */}
-                <Testimonials />
-                {/* </section> */}
+                <section className='mt-4'>
+                    <Testimonials />
+                </section>
+                <section className='px-4'>
+                    <ContactForm />
+                </section>
             </main>
+            <footer>
+                <HomeFooter />
+            </footer>
         </div>
     );
 }

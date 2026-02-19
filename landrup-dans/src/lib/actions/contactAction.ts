@@ -1,0 +1,39 @@
+import z from 'zod';
+import { ContactFormData, contactFormSchema } from '../schemas/schema';
+
+export type ContactState = {
+    success: boolean;
+    errors?: string[];
+};
+
+export default async function contactAction(
+    _prevState: ContactState,
+    formData: FormData
+): Promise<ContactState> {
+    const values = Object.fromEntries(formData.entries());
+    const result = contactFormSchema.safeParse(values);
+
+    if (!result.success) {
+        const zodError = z.treeifyError(result.error);
+
+        console.log('Zod validation error:', zodError);
+
+        return { success: false, errors: zodError.errors };
+    }
+
+    console.log('Validation result:', result);
+
+    const response = await fetch(`http://localhost:4000/api/v1/messages`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: result.data.name,
+            email: result.data.email,
+            message: result.data.message,
+        }),
+    });
+
+    return { success: true };
+}

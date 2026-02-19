@@ -8,3 +8,16 @@ export const contactFormSchema = z.object({
 });
 
 export type ContactFormData = z.infer<typeof contactFormSchema>;
+
+export const signUpSchema = z.object({
+    username: z.string().min(3, { message: 'Username must be at least 3 characters' }),
+    password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+    firstName: z.string().min(2, { message: 'First name must be at least 2 characters' }),
+    lastName: z.string().min(2, { message: 'Last name must be at least 2 characters' }),
+    age: z.number().int().positive({ message: 'Age must be a positive integer' }),
+    role: z.enum(['default', 'instructor'], {
+        message: 'Role must be either default or instructor',
+    }),
+});
+
+export type SignUpData = z.infer<typeof signUpSchema>;

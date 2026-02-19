@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { Ubuntu } from 'next/font/google';
 import './globals.css';
+import { ToastContainer } from 'react-toastify';
 
 const ubuntu = Ubuntu({
-    weight: ['400', '700'],
+    weight: ['300', '400', '500', '700'],
     style: ['normal', 'italic'],
     subsets: ['latin'],
 });
@@ -23,6 +24,7 @@ export default function RootLayout({
         <html lang='en' className='scroll-smooth'>
             <body className={`${ubuntu.className}  antialiased bg-[#003147] text-white`}>
                 {children}
+                <ToastContainer />
             </body>
         </html>
     );
