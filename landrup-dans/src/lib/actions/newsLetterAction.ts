@@ -1,7 +1,6 @@
 'use server';
 
-import { emailSchema } from '../schemas/schema';
-import * as z from 'zod';
+import { emailSchema, getZodErrorMessages } from '../schemas/schema';
 
 export type NewsletterState = {
     success: boolean;
@@ -18,11 +17,7 @@ export async function subscribeToNewsletter(
     console.log('Email value:', email);
 
     if (!result.success) {
-        const zodError = z.treeifyError(result.error);
-
-        console.log('Zod validation error:', zodError);
-
-        return { success: false, errors: zodError.errors };
+        return { success: false, errors: getZodErrorMessages(result.error) };
     }
 
     console.log('Validation result:', result);

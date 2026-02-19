@@ -4,8 +4,11 @@ import HoldTyperCard from '@/components/HoldTyperCard';
 import HomeFooter from '@/components/HomeFooter';
 import NewsletterSignUp from '@/components/NewsletterSignUp';
 import Testimonials from '@/components/Testimonials';
+import { createAccessToken } from '@/lib/utils';
 
-export default function Home() {
+export default async function Home() {
+    const accessToken = await createAccessToken('albertpinn', 'test1234');
+
     return (
         <div className='w-full font-sans'>
             <main className='flex w-full flex-col gap-8 mb-4'>

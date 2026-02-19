@@ -9,12 +9,20 @@ export const contactFormSchema = z.object({
 
 export type ContactFormData = z.infer<typeof contactFormSchema>;
 
+export function getZodErrorMessages(error: z.ZodError): string[] {
+    const flattened = z.flattenError(error);
+    const fieldErrors = Object.values(flattened.fieldErrors)
+        .flat()
+        .filter((message): message is string => typeof message === 'string');
+    return [...flattened.formErrors, ...fieldErrors];
+}
+
 export const signUpSchema = z.object({
     username: z.string().min(3, { message: 'Username must be at least 3 characters' }),
     password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
     firstName: z.string().min(2, { message: 'First name must be at least 2 characters' }),
     lastName: z.string().min(2, { message: 'Last name must be at least 2 characters' }),
-    age: z.number().int().positive({ message: 'Age must be a positive integer' }),
+    age: z.coerce.number().int().positive({ message: 'Age must be a positive integer' }),
     role: z.enum(['default', 'instructor'], {
         message: 'Role must be either default or instructor',
     }),

@@ -1,7 +1,9 @@
 'use server';
 
-import z from 'zod';
-import { signUpSchema } from '../schemas/schema';
+import { cookies } from 'next/headers';
+import { getZodErrorMessages, signUpSchema } from '../schemas/schema';
+import { createAccessToken } from '../utils';
+import { redirect } from 'next/navigation';
 
 export type SignUpState = {
     success: boolean;
@@ -12,13 +14,29 @@ export async function signUpAction(
     _prevState: SignUpState,
     formData: FormData
 ): Promise<SignUpState> {
-    const values = Object.fromEntries(formData.entries());
+    const cookieStore = await cookies();
+
+    const rawValues = Object.fromEntries(formData.entries());
+    const values = {
+        username: rawValues.username,
+        password: rawValues.password,
+        firstName: rawValues.firstName,
+        lastName: rawValues.lastName,
+        age: rawValues.age,
+        role: 'default',
+    };
 
     const result = signUpSchema.safeParse(values);
 
+    console.log('Form values:', values);
+    console.log('Zod validation result:', result);
+
     if (!result.success) {
-        const zodError = z.treeifyError(result.error);
-        return { success: false, errors: zodError.errors };
+        return { success: false, errors: getZodErrorMessages(result.error) };
+    }
+
+    if (values.password !== formData.get('confirmPassword')) {
+        return { success: false, errors: ['Passwords do not match'] };
     }
 
     console.log('Validation result:', result);
@@ -28,14 +46,14 @@ export async function signUpAction(
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: JSON.stringify({
-            username: values.username,
-            password: values.password,
-            firstName: values.firstName,
-            lastName: values.lastName,
-            age: values.age,
-            role: 'default',
-        }),
+        body: new URLSearchParams({
+            username: result.data.username,
+            password: result.data.password,
+            firstname: result.data.firstName,
+            lastname: result.data.lastName,
+            age: String(result.data.age),
+            role: result.data.role,
+        }).toString(),
     });
 
     if (!response.ok) {
@@ -43,5 +61,11 @@ export async function signUpAction(
         return { success: false, errors: errorData.errors || ['Signup failed'] };
     }
 
-    return { success: true, errors: [] };
+    const accessToken = await createAccessToken(result.data.username, result.data.password);
+
+    console.log('Access token:', accessToken);
+
+    cookieStore.set('accessToken', accessToken);
+
+    return redirect('/profil');
 }

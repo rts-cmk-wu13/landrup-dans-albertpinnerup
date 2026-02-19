@@ -1,5 +1,4 @@
-import z from 'zod';
-import { ContactFormData, contactFormSchema } from '../schemas/schema';
+import { contactFormSchema, getZodErrorMessages } from '../schemas/schema';
 
 export type ContactState = {
     success: boolean;
@@ -14,16 +13,12 @@ export default async function contactAction(
     const result = contactFormSchema.safeParse(values);
 
     if (!result.success) {
-        const zodError = z.treeifyError(result.error);
-
-        console.log('Zod validation error:', zodError);
-
-        return { success: false, errors: zodError.errors };
+        return { success: false, errors: getZodErrorMessages(result.error) };
     }
 
     console.log('Validation result:', result);
 
-    const response = await fetch(`http://localhost:4000/api/v1/messages`, {
+    await fetch(`http://localhost:4000/api/v1/messages`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

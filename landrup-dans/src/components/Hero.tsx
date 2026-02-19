@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { Button } from './ui/button';
+import Link from 'next/link';
 
 export default function Hero() {
     return (
@@ -21,7 +22,9 @@ export default function Hero() {
                     height={75}
                 />
             </div>
-            <Button className='z-10 text-lg max-w-[240px] w-full mt-auto'>Log ind</Button>
+            <Link href='/sign-up' className='z-10 text-lg max-w-[240px] w-full mt-auto'>
+                <Button className='z-10 text-lg max-w-[240px] w-full mt-auto'>Log ind</Button>
+            </Link>
             <a href='#holdtyper' className='z-10'>
                 <Image
                     src='/assets/arrow_down.svg'
