@@ -32,7 +32,7 @@ export async function subscribeToNewsletter(
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(result.data),
+        body: JSON.stringify({ email: result.data }),
     });
 
     if (!response.ok) {

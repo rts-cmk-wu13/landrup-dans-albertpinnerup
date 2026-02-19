@@ -1,14 +1,15 @@
 import Hero from '@/components/Hero';
 import HoldTyperCard from '@/components/HoldTyperCard';
 import NewsletterSignUp from '@/components/NewsletterSignUp';
+import Testimonials from '@/components/Testimonials';
 
 export default function Home() {
     return (
         <div className='w-full font-sans'>
             <main className='flex w-full flex-col gap-4 mb-4'>
                 <Hero />
-                <section className='px-4 flex flex-col gap-8' id='holdtyper'>
-                    <h1>Vores holdtyper</h1>
+                <section className='px-4 flex flex-col gap-8'>
+                    <h1 id='holdtyper'>Vores holdtyper</h1>
                     <HoldTyperCard holdtype='Børnehold' imgSrc='boernedans.jpg'>
                         <p>
                             På børneholdene leger vi os ind i dansens verden gennem musik, bevægelse
@@ -46,6 +47,9 @@ export default function Home() {
                 <section className='px-4 flex flex-col gap-8'>
                     <NewsletterSignUp />
                 </section>
+                {/* <section className='px-4 flex flex-col gap-8'> */}
+                <Testimonials />
+                {/* </section> */}
             </main>
         </div>
     );
