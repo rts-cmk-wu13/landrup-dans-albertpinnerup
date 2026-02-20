@@ -1,5 +1,5 @@
 export default async function testimonialsData() {
-    const response = await fetch('http://localhost:4000/api/v1/testimonials', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/testimonials`, {
         method: 'GET',
     });
 
