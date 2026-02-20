@@ -1,29 +1,9 @@
-import type { Metadata } from 'next';
-import { Ubuntu } from 'next/font/google';
-import './globals.css';
-
-const ubuntu = Ubuntu({
-    weight: ['400', '700'],
-    style: ['normal', 'italic'],
-    subsets: ['latin'],
-});
-
-export const metadata: Metadata = {
-    title: 'Landrup Dans',
-    description:
-        'Landrup Dans er en danseforening i Landrup, Danmark. Vi tilbyder dans for alle aldre og niveauer, fra begyndere til erfarne dansere. Vores mål er at skabe et sjovt og inkluderende miljø, hvor alle kan nyde dansen og udvikle deres færdigheder.',
-};
+import MainLayout from '@/layouts/MainLayout';
 
 export default function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    return (
-        <html lang='en' className='scroll-smooth'>
-            <body className={`${ubuntu.className}  antialiased bg-[#003147] text-white`}>
-                {children}
-            </body>
-        </html>
-    );
+    return <MainLayout>{children}</MainLayout>;
 }

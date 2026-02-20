@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { Button } from './ui/button';
+import Link from 'next/link';
 
 export default function Hero() {
     return (
@@ -9,6 +10,7 @@ export default function Hero() {
                 alt='Hero Image'
                 fill={true}
                 className='-z-10 object-cover'
+                priority
             />
 
             <div className='w-full flex flex-col items-center gap-4 z-10'>
@@ -19,9 +21,13 @@ export default function Hero() {
                     className='mr-16 w-full'
                     width={365}
                     height={75}
+                    loading='eager'
+                    priority
                 />
             </div>
-            <Button className='z-10 text-lg max-w-[240px] w-full mt-auto'>Log ind</Button>
+            <Link href='/log-in' className='z-10 text-lg max-w-[240px] w-full mt-auto'>
+                <Button className='z-10 text-lg max-w-[240px] w-full mt-auto'>Log ind</Button>
+            </Link>
             <a href='#holdtyper' className='z-10'>
                 <Image
                     src='/assets/arrow_down.svg'
@@ -29,6 +35,8 @@ export default function Hero() {
                     width={48}
                     height={48}
                     className='animate-bounce'
+                    loading='eager'
+                    priority
                 />
             </a>
         </section>
