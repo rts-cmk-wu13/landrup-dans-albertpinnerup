@@ -5,12 +5,13 @@ export default async function ProfilePage() {
     const cookieStore = await cookies();
 
     const accessToken = cookieStore.get('accessToken')?.value;
+    const userId = cookieStore.get('userId')?.value;
 
     if (!accessToken) {
         redirect('/log-in');
     }
 
-    const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/19`, {
+    const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${accessToken}`,

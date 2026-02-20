@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { LogInErrors, SignUpErrors, signUpSchema } from '../schemas/schema';
-import { createAccessToken } from '../utils';
+import { createAccessToken } from '../auth';
 import { redirect } from 'next/navigation';
 import { z } from 'zod/v4';
 
@@ -125,6 +125,8 @@ export async function logInAction(_prevState: LogInState, formData: FormData): P
     const password = formData.get('password') as string;
     const rememberMe = formData.get('rememberMe') === 'on';
 
+    console.log('LogIn form data:', { username, password, rememberMe });
+
     try {
         const { accessToken, userId, expiresIn } = await createAccessToken(username, password);
 
@@ -139,8 +141,6 @@ export async function logInAction(_prevState: LogInState, formData: FormData): P
             cookieStore.set('accessToken', accessToken);
             cookieStore.set('userId', String(userId));
         }
-
-        redirect('/profil');
     } catch (error) {
         console.error('Login error:', error);
         return {
@@ -149,4 +149,6 @@ export async function logInAction(_prevState: LogInState, formData: FormData): P
             formErrors: ['Invalid username or password'],
         };
     }
+
+    redirect('/profil');
 }
