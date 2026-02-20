@@ -1,14 +1,15 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { SignUpErrors, signUpSchema } from '../schemas/schema';
+import { LogInErrors, SignUpErrors, signUpSchema } from '../schemas/schema';
 import { createAccessToken } from '../utils';
 import { redirect } from 'next/navigation';
 import { z } from 'zod/v4';
 
 export type SignUpState = {
     success: boolean;
-    errors: SignUpErrors | string[];
+    fieldErrors: SignUpErrors;
+    formErrors?: string[];
 };
 
 export async function signUpAction(
@@ -24,6 +25,7 @@ export async function signUpAction(
         firstName: rawValues.firstName,
         lastName: rawValues.lastName,
         age: rawValues.age,
+        rememberMe: rawValues.rememberMe,
         role: 'default',
     };
 
@@ -31,25 +33,39 @@ export async function signUpAction(
 
     console.log('Form values:', values);
     console.log('Zod validation result:', result);
+    const formErrors: string[] = [];
 
     if (!result.success) {
         const zodError = z.treeifyError(result.error);
 
         console.log('Zod validation error:', zodError);
+        if (values.password !== formData.get('confirmPassword')) {
+            formErrors.push('Passwords do not match');
+        }
+
         return {
             success: false,
-            errors: {
+            fieldErrors: {
                 username: zodError.properties?.username,
                 password: zodError.properties?.password,
                 firstName: zodError.properties?.firstName,
                 lastName: zodError.properties?.lastName,
                 age: zodError.properties?.age,
             },
+            formErrors: formErrors,
         };
     }
 
     if (values.password !== formData.get('confirmPassword')) {
-        return { success: false, errors: ['Passwords do not match'] };
+        formErrors.push('Passwords do not match');
+    }
+
+    if (formErrors.length > 0) {
+        return {
+            success: false,
+            fieldErrors: {},
+            formErrors,
+        };
     }
 
     console.log('Validation result:', result);
@@ -71,18 +87,66 @@ export async function signUpAction(
 
     if (!response.ok) {
         const errorData = await response.json();
-        return { success: false, errors: errorData.errors || ['Signup failed'] };
+        return {
+            success: false,
+            fieldErrors: {},
+            formErrors: errorData.errors || ['Signup failed'],
+        };
     }
 
-    const { accessToken, userId } = await createAccessToken(
-        result.data.username,
-        result.data.password
-    );
+    if (values.rememberMe === 'on') {
+        const { accessToken, userId, expiresIn } = await createAccessToken(
+            result.data.username,
+            result.data.password
+        );
+        cookieStore.set('accessToken', accessToken, {
+            expires: expiresIn ? new Date(Date.now() + expiresIn * 1000) : undefined,
+        });
+        cookieStore.set('userId', String(userId), {
+            expires: expiresIn ? new Date(Date.now() + expiresIn * 1000) : undefined,
+        });
 
-    console.log('Access token:', accessToken);
+        redirect('/profil');
+    } else {
+        redirect('/log-in');
+    }
+}
 
-    cookieStore.set('accessToken', accessToken);
-    cookieStore.set('userId', String(userId));
+export type LogInState = {
+    success: boolean;
+    fieldErrors: LogInErrors;
+    formErrors?: string[];
+};
 
-    redirect('/profil');
+export async function logInAction(_prevState: LogInState, formData: FormData): Promise<LogInState> {
+    const cookieStore = await cookies();
+
+    const username = formData.get('username') as string;
+    const password = formData.get('password') as string;
+    const rememberMe = formData.get('rememberMe') === 'on';
+
+    try {
+        const { accessToken, userId, expiresIn } = await createAccessToken(username, password);
+
+        if (rememberMe) {
+            cookieStore.set('accessToken', accessToken, {
+                expires: expiresIn ? new Date(Date.now() + expiresIn * 1000) : undefined,
+            });
+            cookieStore.set('userId', String(userId), {
+                expires: expiresIn ? new Date(Date.now() + expiresIn * 1000) : undefined,
+            });
+        } else {
+            cookieStore.set('accessToken', accessToken);
+            cookieStore.set('userId', String(userId));
+        }
+
+        redirect('/profil');
+    } catch (error) {
+        console.error('Login error:', error);
+        return {
+            success: false,
+            fieldErrors: {},
+            formErrors: ['Invalid username or password'],
+        };
+    }
 }

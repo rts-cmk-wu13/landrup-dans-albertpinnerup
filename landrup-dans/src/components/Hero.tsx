@@ -10,6 +10,7 @@ export default function Hero() {
                 alt='Hero Image'
                 fill={true}
                 className='-z-10 object-cover'
+                priority
             />
 
             <div className='w-full flex flex-col items-center gap-4 z-10'>
@@ -20,9 +21,11 @@ export default function Hero() {
                     className='mr-16 w-full'
                     width={365}
                     height={75}
+                    loading='eager'
+                    priority
                 />
             </div>
-            <Link href='/sign-up' className='z-10 text-lg max-w-[240px] w-full mt-auto'>
+            <Link href='/log-in' className='z-10 text-lg max-w-[240px] w-full mt-auto'>
                 <Button className='z-10 text-lg max-w-[240px] w-full mt-auto'>Log ind</Button>
             </Link>
             <a href='#holdtyper' className='z-10'>
@@ -32,6 +35,8 @@ export default function Hero() {
                     width={48}
                     height={48}
                     className='animate-bounce'
+                    loading='eager'
+                    priority
                 />
             </a>
         </section>

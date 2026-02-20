@@ -1,9 +1,14 @@
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export default async function ProfilePage() {
     const cookieStore = await cookies();
 
     const accessToken = cookieStore.get('accessToken')?.value;
+
+    if (!accessToken) {
+        redirect('/log-in');
+    }
 
     const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/19`, {
         method: 'GET',

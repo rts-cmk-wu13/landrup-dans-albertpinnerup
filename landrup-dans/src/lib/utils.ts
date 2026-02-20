@@ -25,5 +25,5 @@ export async function createAccessToken(username: string, password: string) {
 
     console.log('Access token response:', data);
 
-    return { accessToken: data.accessToken, userId: data.userId };
+    return { accessToken: data.accessToken, userId: data.userId, expiresIn: data.validUntil };
 }

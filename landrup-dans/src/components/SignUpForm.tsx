@@ -5,7 +5,8 @@ import { Button } from './ui/button';
 
 const initialState: SignUpState = {
     success: false,
-    errors: {},
+    fieldErrors: {},
+    formErrors: [],
 };
 
 export default function SignUpForm() {
@@ -15,7 +16,7 @@ export default function SignUpForm() {
     console.log(process.env.NEXT_PUBLIC_API_URL);
 
     return (
-        <section className='flex flex-col  gap-4'>
+        <section className='flex flex-col w-full px-6 py-4 gap-4'>
             <h1>Opret bruger</h1>
             <form action={formAction} className='flex flex-col w-full gap-4 justify-between'>
                 <input
@@ -25,7 +26,9 @@ export default function SignUpForm() {
                     className='border border-secondary bg-secondary text-primary w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                     required
                 />
-
+                {state.fieldErrors?.firstName?.errors?.[0] && (
+                    <p className='text-red-500 text-sm'>{state.fieldErrors.firstName.errors[0]}</p>
+                )}
                 <input
                     type='text'
                     name='lastName'
@@ -33,6 +36,9 @@ export default function SignUpForm() {
                     className='border border-secondary bg-secondary text-primary w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                     required
                 />
+                {state.fieldErrors?.lastName?.errors?.[0] && (
+                    <p className='text-red-500 text-sm'>{state.fieldErrors.lastName.errors[0]}</p>
+                )}
 
                 <input
                     type='text'
@@ -41,14 +47,21 @@ export default function SignUpForm() {
                     className='border border-secondary bg-secondary text-primary w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                     required
                 />
+                {state.fieldErrors?.username?.errors?.[0] && (
+                    <p className='text-red-500 text-sm'>{state.fieldErrors.username.errors[0]}</p>
+                )}
 
                 <input
                     type='number'
                     name='age'
                     placeholder='Alder'
+                    min={0}
                     className='border border-secondary bg-secondary text-primary w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                     required
                 />
+                {state.fieldErrors?.age?.errors?.[0] && (
+                    <p className='text-red-500 text-sm'>{state.fieldErrors.age.errors[0]}</p>
+                )}
 
                 <input
                     type='password'
@@ -57,6 +70,9 @@ export default function SignUpForm() {
                     className='border border-secondary bg-secondary text-primary w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                     required
                 />
+                {state.fieldErrors?.password?.errors?.[0] && (
+                    <p className='text-red-500 text-sm'>{state.fieldErrors.password.errors[0]}</p>
+                )}
 
                 <input
                     type='password'
@@ -65,7 +81,12 @@ export default function SignUpForm() {
                     className='border border-secondary bg-secondary text-primary w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                     required
                 />
+                {state.formErrors && <p className='text-red-500 text-xl'>{state.formErrors}</p>}
 
+                <div className='flex items-center gap-2 justify-center'>
+                    <label htmlFor='rememberMe'>Husk mig?</label>
+                    <input type='checkbox' name='rememberMe' id='rememberMe' />
+                </div>
                 <Button type='submit' disabled={isPending} className='mx-8 p-4'>
                     {isPending ? 'Opretter bruger...' : 'Opret bruger'}
                 </Button>
