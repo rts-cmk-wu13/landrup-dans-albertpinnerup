@@ -1,16 +1,34 @@
+import ActivityDetailsClient from '@/components/ActivityDetailsClient';
 import activitiesData from '@/lib/dal/activities';
+import getUser from '@/lib/dal/user';
+import { ActivityType } from '@/lib/types/types';
+import { cookies } from 'next/headers';
+
+const initialState = {
+    joined: false,
+};
 
 export default async function activityDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+    const cookieStore = await cookies();
     const { id } = await params;
 
-    const activityDetails = await activitiesData(id);
+    const activity: ActivityType = await activitiesData(id);
+    const userId = cookieStore.get('userId')?.value;
 
-    console.log(activityDetails);
+    const user = await getUser();
+
+    console.log('user:', user);
+
+    const initialJoinedState = activity?.users?.some((user) => user.id === Number(userId)) || false;
+
+    console.log('initialJoinedState:', initialJoinedState);
 
     return (
-        <div className='p-4'>
-            <h1 className='text-2xl font-bold mb-4'>Aktivitet Detaljer</h1>
-            <p>Vis detaljer for aktivitet "{activityDetails.name}"</p>
-        </div>
+        <ActivityDetailsClient
+            activity={activity}
+            activityId={id}
+            initialJoinedState={initialJoinedState}
+            age={user.age}
+        />
     );
 }

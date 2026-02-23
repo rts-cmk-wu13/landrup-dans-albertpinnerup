@@ -32,7 +32,7 @@ export default async function MainLayout({
                 {children}
                 <ToastContainer />
                 {isAuthenticated && (
-                    <div className='fixed bottom-0 w-full'>
+                    <div className='fixed bottom-0 z-50 w-full'>
                         <NavBar />
                     </div>
                 )}

@@ -130,16 +130,23 @@ export async function logInAction(_prevState: LogInState, formData: FormData): P
     try {
         const { accessToken, userId, expiresIn } = await createAccessToken(username, password);
 
+        const maxAge = Math.floor(expiresIn / 1000);
+        const expires = new Date(Number(expiresIn * 1000) + Date.now());
+
+        console.log('maxAge:', maxAge, 'expires:', expires);
+
         if (rememberMe) {
             cookieStore.set('accessToken', accessToken, {
-                expires: expiresIn ? new Date(Date.now() + expiresIn * 1000) : undefined,
+                maxAge: maxAge,
+                path: '/',
             });
             cookieStore.set('userId', String(userId), {
-                expires: expiresIn ? new Date(Date.now() + expiresIn * 1000) : undefined,
+                maxAge: maxAge,
+                path: '/',
             });
         } else {
-            cookieStore.set('accessToken', accessToken);
-            cookieStore.set('userId', String(userId));
+            cookieStore.set('accessToken', accessToken, { path: '/' });
+            cookieStore.set('userId', String(userId), { path: '/' });
         }
     } catch (error) {
         console.error('Login error:', error);

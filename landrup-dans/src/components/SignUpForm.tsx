@@ -18,7 +18,10 @@ export default function SignUpForm() {
     return (
         <section className='flex flex-col w-full px-6 py-4 gap-4'>
             <h1>Opret bruger</h1>
-            <form action={formAction} className='flex flex-col w-full gap-4 justify-between'>
+            <form
+                action={formAction}
+                className='flex flex-col text-lg w-full gap-4 justify-between'
+            >
                 <input
                     type='text'
                     name='firstName'
