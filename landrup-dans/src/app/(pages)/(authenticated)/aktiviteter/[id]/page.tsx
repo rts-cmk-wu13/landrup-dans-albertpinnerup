@@ -8,20 +8,13 @@ export default async function activityDetailsPage({ params }: { params: Promise<
     const { id } = await params;
 
     const cookieStore = await cookies();
-    console.log('cookieStore:', cookieStore);
 
     const activity: ActivityType = await activitiesData(id);
     const userId = cookieStore.get('userId')?.value;
 
-    console.log('activity:', activity);
-
     const user = await getUser();
 
-    console.log('user:', user);
-
     const initialJoinedState = activity?.users?.some((user) => user.id === Number(userId)) || false;
-
-    console.log('initialJoinedState:', initialJoinedState);
 
     return (
         <ActivityDetailsClient

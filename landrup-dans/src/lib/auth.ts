@@ -33,9 +33,12 @@ export async function checkAuthentication() {
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
+        cache: 'no-store',
     });
 
     if (!response.ok) {
+        cookieStore.delete('userId');
+        cookieStore.delete('accessToken');
         return false;
     }
 

@@ -1,36 +1,24 @@
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import CalendarCard from '@/components/CalendarCard';
+import getUser from '@/lib/dal/user';
+import { ActivityType } from '@/lib/types/types';
 
 export default async function ProfilePage() {
-    const cookieStore = await cookies();
+    const userData = await getUser();
 
-    const accessToken = cookieStore.get('accessToken')?.value;
-    const userId = cookieStore.get('userId')?.value;
+    const activities = userData.activities;
 
-    if (!accessToken) {
-        redirect('/log-in');
-    }
-
-    const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    });
-
-    if (!userResponse.ok) {
-        console.error('Failed to fetch user data:', userResponse.statusText);
-        redirect('/log-in');
-    }
-
-    const userData = await userResponse.json();
+    console.log('User activities:', activities);
 
     console.log('User data:', userData);
 
     return (
-        <section className='flex flex-col items-center justify-center gap-4'>
-            <h1>Min profil</h1>
-            <p>Her kan du se og redigere dine profiloplysninger.</p>
+        <section className=''>
+            <section className='flex flex-col gap-4 px-4 py-8'>
+                <h3 className='font-medium'>Tilmeldte hold</h3>
+                {activities?.map((activity: ActivityType) => {
+                    return <CalendarCard key={activity.id} activity={activity} />;
+                })}
+            </section>
         </section>
     );
 }
