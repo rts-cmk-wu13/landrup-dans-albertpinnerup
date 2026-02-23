@@ -119,10 +119,17 @@
 @layer base {
     * {
         @apply border-border outline-ring/50;
-        @apply text-lg;
     }
     body {
         @apply bg-background text-foreground;
+    }
+
+    form {
+        @apply text-lg;
+    }
+
+    p {
+        @apply text-lg;
     }
 
     h1 {

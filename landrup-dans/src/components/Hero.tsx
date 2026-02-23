@@ -1,8 +1,9 @@
 import Image from 'next/image';
 import { Button } from './ui/button';
 import Link from 'next/link';
+import { checkAuthentication } from '@/lib/auth';
 
-export default function Hero() {
+export default async function Hero() {
     return (
         <section className='relative p-6 flex min-h-svh w-full flex-col items-center justify-between gap-6 overflow-hidden font-sans'>
             <Image

@@ -4,13 +4,15 @@ import HoldTyperCard from '@/components/HoldTyperCard';
 import HomeFooter from '@/components/HomeFooter';
 import NewsletterSignUp from '@/components/NewsletterSignUp';
 import Testimonials from '@/components/Testimonials';
+import { checkAuthentication } from '@/lib/auth';
 
 export default async function Home() {
+    const isAuthenticated = await checkAuthentication();
     return (
-        <div className='w-full font-sans'>
+        <>
             <main className='flex w-full flex-col gap-8 mb-4'>
-                <Hero />
-                <section className='px-4 flex flex-col gap-8'>
+                {!isAuthenticated && <Hero />}
+                <section className='px-4 flex mt-4 flex-col gap-8'>
                     <h1 id='holdtyper'>Vores holdtyper</h1>
                     <HoldTyperCard holdtype='Børnehold' imgSrc='boernedans.jpg'>
                         <p>
@@ -59,6 +61,6 @@ export default async function Home() {
             <footer>
                 <HomeFooter />
             </footer>
-        </div>
+        </>
     );
 }

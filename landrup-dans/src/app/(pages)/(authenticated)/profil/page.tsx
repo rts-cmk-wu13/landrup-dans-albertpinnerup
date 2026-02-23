@@ -18,6 +18,11 @@ export default async function ProfilePage() {
         },
     });
 
+    if (!userResponse.ok) {
+        console.error('Failed to fetch user data:', userResponse.statusText);
+        redirect('/log-in');
+    }
+
     const userData = await userResponse.json();
 
     console.log('User data:', userData);

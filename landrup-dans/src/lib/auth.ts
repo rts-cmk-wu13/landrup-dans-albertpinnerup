@@ -26,6 +26,18 @@ export async function createAccessToken(username: string, password: string) {
 export async function checkAuthentication() {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get('accessToken')?.value;
+    const userId = cookieStore.get('userId')?.value;
 
-    return Boolean(accessToken);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+
+    if (!response.ok) {
+        return false;
+    }
+
+    return true;
 }
