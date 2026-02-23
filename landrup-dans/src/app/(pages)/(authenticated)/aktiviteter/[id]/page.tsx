@@ -4,16 +4,16 @@ import getUser from '@/lib/dal/user';
 import { ActivityType } from '@/lib/types/types';
 import { cookies } from 'next/headers';
 
-const initialState = {
-    joined: false,
-};
-
 export default async function activityDetailsPage({ params }: { params: Promise<{ id: string }> }) {
-    const cookieStore = await cookies();
     const { id } = await params;
+
+    const cookieStore = await cookies();
+    console.log('cookieStore:', cookieStore);
 
     const activity: ActivityType = await activitiesData(id);
     const userId = cookieStore.get('userId')?.value;
+
+    console.log('activity:', activity);
 
     const user = await getUser();
 

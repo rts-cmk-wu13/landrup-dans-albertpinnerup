@@ -2,11 +2,9 @@
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import toggleActivityParticipation from '@/lib/actions/activityActions';
-import joinActivity from '@/lib/actions/activityActions';
-import activitiesData from '@/lib/dal/activities';
 import { ActivityType } from '@/lib/types/types';
 import Image from 'next/image';
-import { startTransition, useActionState, useEffect, useState } from 'react';
+import { startTransition, useActionState } from 'react';
 
 export default function activityDetailsClient({
     activity,

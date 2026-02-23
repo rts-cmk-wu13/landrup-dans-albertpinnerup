@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export default async function getUser() {
     'use server';
@@ -15,7 +16,7 @@ export default async function getUser() {
     });
 
     if (!response.ok) {
-        throw new Error('Failed to fetch user data');
+        redirect('/log-in');
     }
 
     const userData = await response.json();
