@@ -10,7 +10,7 @@ export default function settingsPage() {
         <section className='flex flex-col gap-4 px-4 py-8'>
             <h3 className='font-medium'>Indstillinger</h3>
             <p>Her kan du ændre dine indstillinger.</p>
-            <Button onClick={() => setShowModal(true)}>Log Ud</Button>
+            <Button onClick={() => setShowModal(true)}>Log ud</Button>
             {showModal &&
                 createPortal(
                     <div className='h-screen w-screen fixed top-0 left-0 bg-black/50 flex items-center justify-center z-50'>
@@ -27,7 +27,7 @@ export default function settingsPage() {
                                     Annuller
                                 </Button>
                                 <Button variant='destructive' onClick={logOutAction}>
-                                    Log Ud
+                                    Log ud
                                 </Button>
                             </div>
                         </div>

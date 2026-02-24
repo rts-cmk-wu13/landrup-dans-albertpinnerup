@@ -1,8 +1,9 @@
 'use client';
 
 import contactAction, { ContactState } from '@/lib/actions/contactAction';
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
 import { Button } from './ui/button';
+import { toast } from 'react-toastify';
 
 const initialState: ContactState = {
     success: false,
@@ -12,7 +13,11 @@ const initialState: ContactState = {
 export default function ContactForm() {
     const [state, formAction, isPending] = useActionState(contactAction, initialState);
 
-    console.log('Contact form state:', state);
+    useEffect(() => {
+        if (state.success) {
+            toast.success('Din besked er sendt! Vi vender tilbage til dig så hurtigt som muligt.');
+        }
+    }, [state.success]);
 
     return (
         <section className='flex flex-col  gap-4'>
