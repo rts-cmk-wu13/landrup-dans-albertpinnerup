@@ -28,7 +28,11 @@ export default function activityDetailsClient({
                 <Button
                     className='z-50 text-lg font-normal px-8 py-4'
                     variant={'secondary'}
-                    disabled={pending || age < activity.minAge}
+                    disabled={
+                        pending ||
+                        age < activity.minAge ||
+                        (activity.maxParticipants === activity.users?.length && !state.joined)
+                    }
                     onClick={() => startTransition(() => action(activityId))}
                 >
                     {pending

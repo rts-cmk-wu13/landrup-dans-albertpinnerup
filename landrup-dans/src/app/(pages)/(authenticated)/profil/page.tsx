@@ -1,36 +1,41 @@
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import CalendarCard from '@/components/CalendarCard';
+import activitiesData from '@/lib/dal/activities';
+import getUser from '@/lib/dal/user';
+import { ActivityType, UserType } from '@/lib/types/types';
 
 export default async function ProfilePage() {
-    const cookieStore = await cookies();
+    const userData: UserType = await getUser();
 
-    const accessToken = cookieStore.get('accessToken')?.value;
-    const userId = cookieStore.get('userId')?.value;
+    const allActivities = await activitiesData();
 
-    if (!accessToken) {
-        redirect('/log-in');
+    let activities: ActivityType[] = [];
+
+    if (userData.role === 'instructor') {
+        activities = allActivities.filter(
+            (activity: ActivityType) => activity.instructorId === userData.id
+        );
+    } else {
+        activities = allActivities.filter((activity: ActivityType) =>
+            activity?.users?.some((user: UserType) => user.id === userData.id)
+        );
     }
-
-    const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    });
-
-    if (!userResponse.ok) {
-        console.error('Failed to fetch user data:', userResponse.statusText);
-        redirect('/log-in');
-    }
-
-    const userData = await userResponse.json();
-
-    console.log('User data:', userData);
 
     return (
-        <section className='flex flex-col items-center justify-center gap-4'>
-            <h1>Min profil</h1>
-            <p>Her kan du se og redigere dine profiloplysninger.</p>
+        <section className=''>
+            <section className='flex flex-col gap-4 px-4 py-8'>
+                <h3 className='font-medium'>
+                    {userData.role === 'instructor' ? 'Mine hold' : 'Tilmeldte hold'}
+                </h3>
+                {activities?.map((activity: ActivityType) => {
+                    return (
+                        <CalendarCard
+                            key={activity.id}
+                            activity={activity}
+                            role={userData?.role === 'instructor' ? 'instructor' : 'default'}
+                        />
+                    );
+                })}
+            </section>
         </section>
     );
 }

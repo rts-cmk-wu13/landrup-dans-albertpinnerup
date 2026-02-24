@@ -21,6 +21,7 @@ export type ActivityType = {
     description: string;
     minAge: number;
     maxAge: number;
+    maxParticipants: number;
     time: string;
     weekday: string;
     instructorId: number;

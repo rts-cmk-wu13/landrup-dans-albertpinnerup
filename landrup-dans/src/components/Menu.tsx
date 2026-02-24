@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { House, List, UserRound, type LucideIcon } from 'lucide-react';
+import UserIcon from '@/components/ui/UserIcon';
 
 type NavItem = {
     id: string;
@@ -35,7 +36,15 @@ export default function NavBar() {
                                 href={item.href}
                                 className={active ? 'text-black' : 'text-[#6F6F6F]'}
                             >
-                                <Icon size={24} aria-hidden='true' />
+                                {item.id === 'profile' ? (
+                                    <UserIcon
+                                        width={18}
+                                        height={18}
+                                        className={active ? 'text-primary' : 'text-[#6F6F6F]'}
+                                    />
+                                ) : (
+                                    <Icon size={24} aria-hidden='true' />
+                                )}
                             </Link>
                         </li>
                     );

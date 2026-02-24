@@ -1,11 +1,14 @@
-import { checkAuthentication } from '@/lib/auth';
+import getUser from '@/lib/dal/user';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function proxy(request: NextRequest) {
-    const session = await checkAuthentication();
+    const session = await getUser();
 
     if (!session) {
-        return NextResponse.redirect(new URL('/login', request.url));
+        const res = NextResponse.redirect(new URL('/log-in', request.url));
+        res.cookies.delete('accessToken');
+        res.cookies.delete('userId');
+        return res;
     }
 
     return NextResponse.next();

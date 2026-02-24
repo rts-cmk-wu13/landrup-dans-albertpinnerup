@@ -8,12 +8,17 @@
 - Zod
 - ShadCN
 
-Jeg har valgt NextJS, da jeg syntes det er rart at få en masse ting serveret på et sølvfad. Det er rart at bruge et framework hvor der allerede er taget nogle beslutninger for en (af folk der har arbejdet med faget i længere tid) - der er ingen grund til at genopfinde den dybe tallerken. Jeg er ret stor fan af der fil baserede routes, frem for f.eks. react routers kode-baseret router.
+Jeg har valgt Next.js, da jeg syntes det er rart at få en masse ting serveret på et sølvfad. Framworket gør blandt andet brug af filbaseret routing, serverside-rendering og nem konfigurering af caching. Det gør at jeg ikke selv skal sammensætte mange forskellige eksterne pakker og biblioteker. Der er ingen grund til at genopfinde den dybe tallerken, når andre udviklere har siddet med den hovedpine i mange år før mig.
 
-Jeg har valgt at bruge TailwindCSS, fordi det fjerner noget fil struktur og overblik som jeg skulle brug 'hjerne-kapacitet' på, hvis jeg f.eks. havde valgt at bruge SASS.
-Det giver for mig god mening at bruge Tailwind da jeg godt kan lide at arbejde 'atomiseret'. Så styling til et komponent hænger sammen med komponentet - desuden er det også hurtigere at skrive end vanilla CSS og SASS.
+At næsten al funktionalitet er samlet et sted gør det meget nemmere for mig at læse dokumentation, da jeg ikke konstant skal skifte mellem forskellige økosystemer.
 
-Jeg har valgt at bruge TypeScript, da det giver mig en bedre 'developer experience'. Det er en kæmpe gave når man skal til at håndtere data fra et API, props på et komponentet osv.
+Jeg har valgt at bruge TailwindCSS, da det muliggør at have min styling side om side med min logik - det reducere fil/kontekst skift, hvilket for mig giver en bedre "developer experience", end hvis jeg f.eks. havde valgt SASS, hvor styling foregår i et seperat dokument.
+Jeg kan godt lide at arbejde atomiseret, altså at bygge UI af en masse små komponenter. Tailwind gør, at min styling og markup hænger tæt sammen, hvilket betyder, at jeg kan iterere hurtigere, da ikke skal navigere imellem tonsvis af filer.
+
+Jeg har valgt at bruge TypeScript, da det også giver mig en bedre developer experience. Det er en kæmpe gave, når man skal håndtere data fra et API, props på komponenter osv., da types hjælper med at sikre, at data har den forventede struktur.
+
+Det betyder også, at mange fejl bliver opdaget/fanget allerede ved build-time frem for at først opstå under runtime, hvilket giver en bedre udviklingsprocess.
+Samtidig gør TypeScript det meget nemmere at arbejde på andres kode samt at refaktorere, da de forventede datatyper allerede er defineret og dokumenteret DIREKTE i kode basen.
 
 ## Tredjeparts kode
 
@@ -32,7 +37,7 @@ Jeg har valgt at løse valgfri opgave B og C, da jeg syntes at der var meget log
 
 Jeg har forsøgt så vidt som muligt, at splitte logik op og strukturere projektet. Det vil sige en mappe til alle layouts, en fil til auth helpers, en mappe til actions, route groups osv. Dette er for at nemmere at kunne holde overblik og for ikke at komme til lave spaghette kode.
 Jeg har også valgt at fortolke designet, de steder hvor det ikke er tydeligt hvad der skal ske/hvordan det skal se ud.
-Jeg har f.eks. valgt at fjerne heroen på forsiden når man er logget ind, da den optager meget 'screen real estate' og føles redundant når brugeren allerede har set den.
+Jeg har f.eks. valgt at fjerne heroen på forsiden når man er logget ind, da den optager meget 'screen real estate' og føles redundant når brugeren allerede har set den og er logget ind.
 
 ## Kode Eksempel
 

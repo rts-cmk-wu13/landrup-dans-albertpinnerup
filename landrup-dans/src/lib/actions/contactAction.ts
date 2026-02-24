@@ -1,3 +1,4 @@
+'use server';
 import { z } from 'zod/v4';
 import { ContactFormErrors, contactFormSchema } from '../schemas/schema';
 
