@@ -37,8 +37,6 @@ export async function checkAuthentication() {
     });
 
     if (!response.ok) {
-        cookieStore.delete('userId');
-        cookieStore.delete('accessToken');
         return false;
     }
 

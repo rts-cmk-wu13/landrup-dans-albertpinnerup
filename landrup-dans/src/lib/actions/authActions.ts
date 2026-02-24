@@ -159,3 +159,10 @@ export async function logInAction(_prevState: LogInState, formData: FormData): P
 
     redirect('/profil');
 }
+
+export async function logOutAction() {
+    const cookieStore = await cookies();
+    cookieStore.delete('accessToken');
+    cookieStore.delete('userId');
+    redirect('/log-in');
+}

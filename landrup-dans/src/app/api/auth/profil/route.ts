@@ -1,8 +1,7 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-export default async function getUser() {
-    'use server';
+export async function GET() {
     const cookieStore = await cookies();
     const userId = cookieStore.get('userId')?.value;
     const accessToken = cookieStore.get('accessToken')?.value;
@@ -16,9 +15,8 @@ export default async function getUser() {
     });
 
     if (!response.ok) {
+        cookieStore.delete('accessToken');
+        cookieStore.delete('userId');
         redirect('/log-in');
     }
-
-    const userData = await response.json();
-    return userData;
 }
