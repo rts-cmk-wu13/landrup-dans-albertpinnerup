@@ -4,23 +4,44 @@ import { Spinner } from '@/components/ui/spinner';
 import toggleActivityParticipation from '@/lib/actions/activityActions';
 import { ActivityType } from '@/lib/types/types';
 import Image from 'next/image';
-import { startTransition, useActionState } from 'react';
+import { useOptimistic, useState, useTransition } from 'react';
 
-export default function activityDetailsClient({
+export default function ActivityDetailsClient({
     activity,
     activityId,
     initialJoinedState,
     age,
+    role,
 }: {
     activity: ActivityType;
-    activityId: string;
+    activityId: ActivityType['id'];
     initialJoinedState: boolean;
     age: number;
+    role: string;
 }) {
-    const initialState = {
-        joined: initialJoinedState,
+    const [joined, setJoined] = useState(initialJoinedState);
+
+    const [isPending, startTransition] = useTransition();
+
+    const disabled =
+        isPending ||
+        age < activity.minAge ||
+        age > activity.maxAge ||
+        role === 'instructor' ||
+        (activity.maxParticipants === activity.users?.length && !joined);
+
+    const onToggle = () => {
+        const nextJoined = !joined;
+
+        startTransition(async () => {
+            setJoined(nextJoined);
+
+            const res = await toggleActivityParticipation({ activityId, join: nextJoined });
+            if (res.ok) {
+                setJoined(nextJoined);
+            }
+        });
     };
-    const [state, action, pending] = useActionState(toggleActivityParticipation, initialState);
 
     return (
         <main>
@@ -28,20 +49,10 @@ export default function activityDetailsClient({
                 <Button
                     className='z-50 text-lg font-normal px-8 py-4'
                     variant={'secondary'}
-                    disabled={
-                        pending ||
-                        age < activity.minAge ||
-                        (activity.maxParticipants === activity.users?.length && !state.joined)
-                    }
-                    onClick={() => startTransition(() => action(activityId))}
+                    disabled={disabled}
+                    onClick={onToggle}
                 >
-                    {pending
-                        ? state.joined
-                            ? 'Forlader' + <Spinner />
-                            : 'Tilmelder' + <Spinner />
-                        : state.joined
-                          ? 'Forlad aktivitet'
-                          : 'Tilmeld'}
+                    {joined ? 'Forlad aktivitet' : 'Tilmeld'}
                 </Button>
 
                 <Image

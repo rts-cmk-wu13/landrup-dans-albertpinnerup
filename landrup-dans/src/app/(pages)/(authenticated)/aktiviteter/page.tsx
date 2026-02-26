@@ -1,7 +1,6 @@
-import ActivityCard from '@/components/ActivityCard';
+import ActivityPageClient from '@/components/ActivityPageClient';
 import { checkAuthentication } from '@/lib/auth';
 import activitiesData from '@/lib/dal/activities';
-import assetsData from '@/lib/dal/assets';
 import { redirect } from 'next/navigation';
 
 export default async function activitiesPage() {
@@ -15,23 +14,8 @@ export default async function activitiesPage() {
     console.log(activities);
 
     return (
-        <main className='p-4'>
-            <h1 className='mb-4'>Aktiviteter</h1>
-
-            <div className='flex flex-col gap-6'>
-                {activities.map((activity: any) => {
-                    return (
-                        <ActivityCard
-                            key={activity.id}
-                            imgUrl={activity.asset.url}
-                            name={activity.name}
-                            minAge={activity.minAge}
-                            maxAge={activity.maxAge}
-                            id={activity.id}
-                        />
-                    );
-                })}
-            </div>
+        <main className='px-8 py-4'>
+            <ActivityPageClient activities={activities} />
         </main>
     );
 }

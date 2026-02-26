@@ -164,5 +164,5 @@ export async function logOutAction() {
     const cookieStore = await cookies();
     cookieStore.delete('accessToken');
     cookieStore.delete('userId');
-    redirect('/log-in');
+    redirect('/');
 }

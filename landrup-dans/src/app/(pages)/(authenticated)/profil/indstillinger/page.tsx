@@ -1,11 +1,13 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { logOutAction } from '@/lib/actions/authActions';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { createPortal } from 'react-dom';
 
 export default function settingsPage() {
     const [showModal, setShowModal] = useState(false);
+    const [_, startTransition] = useTransition();
+
     return (
         <section className='flex flex-col gap-4 px-4 py-8'>
             <h3 className='font-medium'>Indstillinger</h3>
@@ -26,7 +28,10 @@ export default function settingsPage() {
                                 >
                                     Annuller
                                 </Button>
-                                <Button variant='destructive' onClick={logOutAction}>
+                                <Button
+                                    variant='destructive'
+                                    onClick={() => startTransition(() => logOutAction())}
+                                >
                                     Log ud
                                 </Button>
                             </div>
